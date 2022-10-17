@@ -9,9 +9,9 @@ from sys import argv
 if __name__ == "__main__":
     employee_id = argv[1]
     resp_user = r.get(
-       'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id))
+       'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)
     resp_todos = r.get(
-       'https://jsonplaceholder.typicode.com/users/{}/todos'.format(employee_id))
+       'https://jsonplaceholder.typicode.com/users/{}/todos'.format(employee_id)
 
     try:
         users = resp_user.json()
