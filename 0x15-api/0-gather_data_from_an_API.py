@@ -1,28 +1,30 @@
 #!/usr/bin/python3
-""" Module of Gather data from an API"""
+"""
+Python script that, using this REST API,
+for a given employee ID, returns information about his/her TODO list progress.
+"""
+import requests as r
+from sys import argv
  
-if __name__ == '__main__':
-    import requests
-    import sys
+if __name__ == "__main__":
+    employee_id = argv[1]
+    resp_user = r.get(
+        'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id))
+    resp_todos = r.get(
+        'https://jsonplaceholder.typicode.com/users/{}/todos'.format(employee_id))
  
-    EMPLOYEE_NAME = "name"
-    NUMBER_OF_DONE_TASKS = 0
-    TOTAL_NUMBER_OF_TASKS = 0
-    r = requests.get('https://jsonplaceholder.typicode.com/users/{}'
-                     .format(sys.argv[1]))
-    EMPLOYEE_NAME = r.json().get('name')
-    r = requests.get('https://jsonplaceholder.typicode.com/users/{}/todos'
-                     .format(sys.argv[1]))
-    reponse = r.json()
+    try:
+        users = resp_user.json()
+        user_todos = resp_todos.json()
  
-    for loop in reponse:
-        TOTAL_NUMBER_OF_TASKS += 1
-        if loop.get('completed'):
-            NUMBER_OF_DONE_TASKS += 1
+        completed_task = list(
+            filter(lambda x: x.get("completed") is True, user_todos))
  
-    print("Employee {} is done with tasks({}/{})".format(
-         EMPLOYEE_NAME, NUMBER_OF_DONE_TASKS, TOTAL_NUMBER_OF_TASKS))
+        print("Employee {} is done with tasks({}/{}):".format(users.get('name'),
+              len(completed_task), len(user_todos)))
  
-    for loop in reponse:
-        if loop.get('completed'):
-            print("\t ", loop.get('title'))
+        for todo in completed_task:
+            print("\t {}".format(todo.get('title')))
+ 
+    except Exception as e:
+        print(e)
