@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-HOST="localhost"
-LOOCALHOST="127.0.0.2"
-
-cp /etc/hosts ~/hosts.new
-sed -i "/$HOST/ s/.*/$LOOCALHOST\t$HOST/g" ~/hosts.new
-sed -i "/$HOST$/a 8.8.8.8\t\tfacebook.com" ~/hosts.new
-cp -f ~/hosts.new /etc/hosts
